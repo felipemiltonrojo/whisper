@@ -55,10 +55,11 @@
                             <p>1. Selecciona el género de la voz (femenino/masculino).</p>
                             <p>2. Introduce un email (no necesariamente tu correo personal) donde te enviaremos el link de descarga.</p>
                             <p>3. Redacta el texto de tu fantasía tal cual como deseas que sea narrado. Te sugerimos señalar instrucciones entre paréntesis. Ej: <i>(con voz suave), (gritando), (entre risas),</i> etc.</p>
-                            <form action="inc/sendemail.php" class="contact-form-validated contact-one__form my-4">
+                            <p>Escríbenos a ayuda@zzuzzi.com si necesitas ayuda.</p>
+                            <form id="my-form" action="https://formspree.io/xleplzkr" method="POST" class="contact-form-validated contact-one__form my-4">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12 mb-4">
-                                        <select class="custom-select bootstrap-select">
+                                        <select name="voice" class="custom-select bootstrap-select" required>
                                             <option selected>Tipo de Voz</option>
                                             <option value="1">Femenina</option>
                                             <option value="2">Masculina</option>
@@ -75,7 +76,8 @@
                                         <textarea placeholder="Escribe aquí tu Fantasía" name="message"></textarea>
                                     </div><!-- /.col-lg-12 -->
                                     <div class="col-lg-12 text-left mb-5">
-                                        <button type="submit" class="thm-btn contact-one__btn"><span>Crear mi Fantasía</span></button>
+                                        <button id="my-form-button" class="thm-btn contact-one__btn"><span>Crear mi Fantasía</span></button>
+                                        <h4 id="my-form-status" class="text-success"></h4>
                                         <!-- /.thm-btn contact-one__btn -->
                                     </div><!-- /.col-lg-12 -->
                                 </div><!-- /.row -->
@@ -109,6 +111,53 @@
     <script src="assets/js/TweenMax.min.js"></script>
     <script src="assets/js/wow.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+
+            // get the form elements defined in your form HTML above
+
+            var form = document.getElementById("my-form");
+            var button = document.getElementById("my-form-button");
+            var status = document.getElementById("my-form-status");
+
+            // Success and Error functions for after the form is submitted
+
+            function success() {
+            form.reset();
+            button.style = "display: none ";
+            status.innerHTML = "Hemos recibido tu guión. Pronto te contactaremos.";
+            }
+
+            function error() {
+            status.innerHTML = "¡Uy! Hubo un problema. Refresca la página y reintenta.";
+            }
+
+            // handle the form submission event
+
+            form.addEventListener("submit", function(ev) {
+            ev.preventDefault();
+            var data = new FormData(form);
+            ajax(form.method, form.action, data, success, error);
+            });
+        });
+
+        // helper function for sending an AJAX request
+
+        function ajax(method, url, data, success, error) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            if (xhr.status === 200) {
+                success(xhr.response, xhr.responseType);
+            } else {
+                error(xhr.status, xhr.response, xhr.responseType);
+            }
+            };
+            xhr.send(data);
+        }
+    </script>
 </body>
 
 </html>

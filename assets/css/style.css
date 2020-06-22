@@ -1267,6 +1267,10 @@ li {
 	letter-spacing: .02em;
 }
 
+.side-menu__content a {
+	font-size: 20px;
+}
+
 .side-menu__content p+p {
 	margin-top: 30px;
 }
